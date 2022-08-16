@@ -1,4 +1,6 @@
-export default {
+import { vuexLocal } from './persist'
+
+export const modalState = {
   state: {
     isModalShown: false,
   },
@@ -8,11 +10,14 @@ export default {
     }
   },
   mutations: {
-    updateisModalShown(state) {
+    updateIsModalShown(state) {
       state.isModalShown = !state.isModalShown
     },
   },
   actions: {
 
   },
+  plugins: [
+    vuexLocal.plugin,
+  ]
 }

@@ -7,6 +7,15 @@
       id="filter"
       placeholder="Поиск ID, Имени, статуса или даты"
       v-model="searchString"
+      @keyup.stop.enter="filter()"
+    />
+    <input
+      type="text"
+      name="sort"
+      id="sort"
+      placeholder="Сортировать по..."
+      v-model="sortString"
+      @keyup.prevent.enter="sort()"
     />
   </div>
 </template>
@@ -15,18 +24,13 @@
 //@TODO:
 //search icon
 
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 export default {
   name: "SortFilter",
   data() {
     return {
       searchString: "",
-      task: {
-        title: "",
-        date: new Date(),
-        id: Math.floor(Date.now() * Math.random()),
-        isDone: false,
-      },
+      sortString: "",
     };
   },
   props: {
@@ -34,19 +38,22 @@ export default {
     settings: Object,
   },
   methods: {
-    ...mapMutations(["addTask"]),
+    ...mapMutations(["sortBy", "filterBy", "setFilter", "setSort"]),
+    filter() {
+      this.setFilter(this.searchString);
+    },
+    sort() {
+      this.setSort(this.sortString);
+      console.log(this.getSortBy);
+    },
+  },
+  computed: {
+    ...mapGetters(["getSortBy", "getFilterBy"]),
   },
 };
 </script>
 
 <style scoped>
-.modal {
-  position: absolute;
-  top: 30vh;
-  left: 20vw;
-  background: #f8f8f8;
-  padding: 20px;
-}
 .expenceEdit {
   display: flex;
   position: absolute;

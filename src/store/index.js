@@ -1,11 +1,14 @@
-import tasks from './modules/tasks'
-import modal from './modules/modal'
-
+import { tasksState } from './modules/tasks'
+import { modalState } from './modules/modal'
+import { vuexLocal } from './modules/persist'
 import { createStore } from 'vuex'
 
 export const store = createStore({
   modules: {
-    tasks,
-    modal
-  }
+    tasksState,
+    modalState,
+  },
+  plugins: [
+    vuexLocal.plugin,
+  ]
 })

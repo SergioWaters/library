@@ -1,14 +1,14 @@
 <template>
-  <List />
+  <button @click="updateIsModalShown"></button>
   <Modal v-if="getIsModalShown" />
   <Filter />
-  <button @click="updateisModalShown"></button>
+  <List />
 </template>
 
 <script>
 import List from "./components/list/ListComp.vue";
-import Modal from "./components/ModalComp.vue";
 import Filter from "./components/FilterComp.vue";
+import Modal from "./components/ModalComp.vue";
 
 import { mapActions, mapMutations, mapGetters } from "vuex";
 
@@ -16,28 +16,23 @@ export default {
   name: "App",
   components: {
     List,
-    Modal,
     Filter,
+    Modal,
   },
   data() {
     return {
       isModalShown: false,
     };
   },
-  provide() {
-    return {
-      isModalShown: this.isModalShown,
-    };
-  },
   methods: {
     ...mapActions(["fetchData"]),
-    ...mapMutations(["updateisModalShown"]),
+    ...mapMutations(["updateIsModalShown"]),
   },
   computed: {
     ...mapGetters(["getIsModalShown"]),
   },
   created() {
-    this.fetchData();
+    // this.fetchData();
   },
 };
 </script>

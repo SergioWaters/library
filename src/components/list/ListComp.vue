@@ -12,12 +12,16 @@
         class="list__item_checkbox"
         type="checkbox"
         name="checkbox"
-        id="chk"
+        :id="item.id"
+        :checked="item.isDone"
       />
-      <label class="list__item_label-unchecked" for="chk" v-if="!item.isDone"
+      <label
+        class="list__item_label-unchecked"
+        :for="item.id"
+        v-if="!item.isDone"
         >empty box</label
       >
-      <label class="list__item_label-checked" for="chk" v-if="item.isDone"
+      <label class="list__item_label-checked" :for="item.id" v-if="item.isDone"
         >filled box</label
       >
 
@@ -41,6 +45,7 @@
 import { mapGetters, mapMutations } from "vuex";
 
 export default {
+  name: "ListComp",
   data() {
     return {};
   },
@@ -78,5 +83,14 @@ export default {
   justify-content: space-between;
   align-items: center;
   min-height: 58px;
+}
+.list__item_checkbox {
+  width: 50px;
+}
+.list__item_title {
+  min-width: 300px;
+}
+.list__item_status {
+  width: 150px;
 }
 </style>
