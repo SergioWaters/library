@@ -4,38 +4,32 @@ import { vuexLocal } from './persist'
 export const tasksState = {
   state: {
     tasksArr: [],
-    sortBy: '',
-    filterBy: '',
+    searchString: '',
   },
   getters: {
     getTasks(state) {
       return state.tasksArr
     },
-    getSortBy(state) {
-      return state.tasksArr.sort(
-        (a = a[state.sortBy], b = b[state.sortBy]) => {
-          if (a > b) return 1;
-          if (b > a) return -1;
-          return 0
-        })
+    getTasksSortedBy(state) {
+      const sortedArr = state.tasksArr;
+      const key = state.searchString
+      return sortedArr.sort(
+        (a, b) => (a[key] < b[key]) ? 1 : -1);
     },
-    getFilterBy(state) {
-      const regExp = new RegExp(`${state.filterBy}`, 'gi');
+    getTasksFilteredBy(state) {
+      const regExp = new RegExp(`${state.searchString}`, 'gi');
       return state.tasksArr.filter(i => Object.values(i).some(el => regExp.test(el)))
     }
   },
   mutations: {
     setFilter(state, str) {
-      state.filterBy = str
-    },
-    setSort(state, str) {
-      state.sortBy = str
+      state.searchString = str;
     },
     updateTasks(state, arr) {
-      state.tasksArr = arr
+      state.tasksArr = arr;
     },
     addTask(state, obj) {
-      state.tasksArr = [...state.tasksArr, obj]
+      state.tasksArr = [obj, ...state.tasksArr];
     },
     changeTask(state, indx) {
       state.tasksArr[indx].isDone = !state.tasksArr[indx].isDone;

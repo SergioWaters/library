@@ -1,5 +1,3 @@
-import { vuexLocal } from './persist'
-
 export const modalState = {
   state: {
     isModalShown: false,
@@ -13,11 +11,5 @@ export const modalState = {
     updateIsModalShown(state) {
       state.isModalShown = !state.isModalShown
     },
-  },
-  actions: {
-
-  },
-  plugins: [
-    vuexLocal.plugin,
-  ]
+  }
 }

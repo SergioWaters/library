@@ -6,43 +6,24 @@
       <span class="list__item_status">Статус</span>
       <span class="list__item_date">Дата</span>
     </li>
-    <li class="list__item" v-for="item in itemsArr || getTasks" :key="item?.id">
-      <input
-        @change="toggleChecked(item.id)"
-        class="list__item_checkbox"
-        type="checkbox"
-        name="checkbox"
-        :id="item.id"
-        :checked="item.isDone"
-      />
-      <label
-        class="list__item_label-unchecked"
-        :for="item.id"
-        v-if="!item.isDone"
-        >empty box</label
-      >
-      <label class="list__item_label-checked" :for="item.id" v-if="item.isDone"
-        >filled box</label
-      >
-
-      <span class="list__item_title">{{ item?.title }}</span>
-      <span class="list__item_status">{{
-        item.isDone ? "Выполнено" : "В работе"
-      }}</span>
-      <span class="list__item_date">{{ getDate(item?.date) }}</span>
-    </li>
+    <ListItemComp
+      class="list__item"
+      v-for="item in itemsArr || getTasks"
+      :key="item?.id"
+      :item="item"
+    />
   </ul>
 </template>
 
 <!--
 @TODO:
 Вынести листайтем в отдельный компонент
-добавить иконки чекбоксов
 добавить стили
 -->
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import ListItemComp from "./ListItemComp.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ListComp",
@@ -53,19 +34,8 @@ export default {
     itemsArr: Array,
   },
 
-  components: {},
-
-  methods: {
-    ...mapMutations(["changeTask"]),
-    getDate(d) {
-      return new Intl.DateTimeFormat("ru-RU").format(new Date(d));
-    },
-    toggleChecked(id) {
-      const find = this.getTasks.findIndex((i) => +i.id === +id);
-      find >= 0
-        ? this.changeTask(find)
-        : console.log("there is NO task with id" + id);
-    },
+  components: {
+    ListItemComp,
   },
   computed: {
     ...mapGetters(["getTasks"]),
@@ -83,14 +53,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   min-height: 58px;
-}
-.list__item_checkbox {
-  width: 50px;
-}
-.list__item_title {
-  min-width: 300px;
-}
-.list__item_status {
-  width: 150px;
+  border-bottom: 1px solid #eeebe9;
 }
 </style>

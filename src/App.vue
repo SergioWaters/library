@@ -1,36 +1,22 @@
 <template>
-  <button @click="updateIsModalShown"></button>
-  <Modal v-if="getIsModalShown" />
-  <Filter />
-  <List />
+  <LayoutView />
 </template>
 
 <script>
-import List from "./components/list/ListComp.vue";
-import Filter from "./components/FilterComp.vue";
-import Modal from "./components/ModalComp.vue";
-
-import { mapActions, mapMutations, mapGetters } from "vuex";
+import LayoutView from "./pages/LayoutView.vue";
 
 export default {
   name: "App",
   components: {
-    List,
-    Filter,
-    Modal,
+    LayoutView,
   },
   data() {
     return {
       isModalShown: false,
     };
   },
-  methods: {
-    ...mapActions(["fetchData"]),
-    ...mapMutations(["updateIsModalShown"]),
-  },
-  computed: {
-    ...mapGetters(["getIsModalShown"]),
-  },
+  methods: {},
+  computed: {},
   created() {
     // this.fetchData();
   },

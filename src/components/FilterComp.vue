@@ -1,22 +1,37 @@
 <template>
   <div class="sort-filter">
-    <label for="filter">searchicon</label>
+    <label for="filter"
+      ><svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12.8645 11.3208H12.0515L11.7633 11.0429C12.7719 9.86964 13.3791 8.34648 13.3791 6.68954C13.3791 2.99485 10.3842 0 6.68954 0C2.99485 0 0 2.99485 0 6.68954C0 10.3842 2.99485 13.3791 6.68954 13.3791C8.34648 13.3791 9.86964 12.7719 11.0429 11.7633L11.3208 12.0515V12.8645L16.4666 18L18 16.4666L12.8645 11.3208ZM6.68954 11.3208C4.12693 11.3208 2.05832 9.25214 2.05832 6.68954C2.05832 4.12693 4.12693 2.05832 6.68954 2.05832C9.25214 2.05832 11.3208 4.12693 11.3208 6.68954C11.3208 9.25214 9.25214 11.3208 6.68954 11.3208Z"
+          fill="#59BBA6"
+        /></svg
+    ></label>
     <input
       type="text"
       name="filter"
       id="filter"
       placeholder="Поиск ID, Имени, статуса или даты"
       v-model="searchString"
-      @keyup.stop.enter="filter()"
+      @input="filter('filter')"
     />
-    <input
-      type="text"
-      name="sort"
-      id="sort"
-      placeholder="Сортировать по..."
+    <label for="select"></label>
+    <select
+      name="select"
+      id="select"
+      @change="filter('sort')"
       v-model="sortString"
-      @keyup.prevent.enter="sort()"
-    />
+    >
+      <option :value="key" v-for="(value, key) of keys" :key="key">
+        {{ value }}
+      </option>
+    </select>
   </div>
 </template>
 
@@ -24,32 +39,29 @@
 //@TODO:
 //search icon
 
-import { mapMutations, mapGetters } from "vuex";
 export default {
   name: "SortFilter",
+  emits: ["filter"],
+  props: {
+    keys: Object,
+  },
   data() {
     return {
       searchString: "",
       sortString: "",
     };
   },
-  props: {
-    name: String,
-    settings: Object,
-  },
   methods: {
-    ...mapMutations(["sortBy", "filterBy", "setFilter", "setSort"]),
-    filter() {
-      this.setFilter(this.searchString);
-    },
-    sort() {
-      this.setSort(this.sortString);
-      console.log(this.getSortBy);
+    filter(action) {
+      const obj = {
+        string: this.searchString || this.sortString,
+        action,
+      };
+      this.$emit("filter", obj);
+      console.log(obj);
     },
   },
-  computed: {
-    ...mapGetters(["getSortBy", "getFilterBy"]),
-  },
+  computed: {},
 };
 </script>
 

@@ -7,7 +7,6 @@
       id="descr"
       placeholder="Введите описание"
       v-model="title"
-      @keydown.esc="hide()"
       @keyup.enter="submit()"
     />
     <button class="button-close" @click="hide()">X</button>
@@ -20,7 +19,6 @@
 @TODO:
 сделать подложку
 добавить стили
-добавить закрытие по клику esc
 -->
 
 <script>
@@ -32,10 +30,6 @@ export default {
       title: "",
       error: "",
     };
-  },
-  props: {
-    name: String,
-    settings: Object,
   },
   methods: {
     ...mapMutations(["addTask", "updateIsModalShown"]),
