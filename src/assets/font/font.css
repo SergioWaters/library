@@ -1,0 +1,21 @@
+@font-face {
+  font-family: "agavantgarde";
+  src: url(./agavantgardecyrbook.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "montserrat";
+  src: url(./montserratbold.ttf) format('truetype');
+  font-weight: bold;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: "vela";
+  src: url(./velasansregular.woff2) format('woff2'),
+    url(./velasansregular.woff) format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

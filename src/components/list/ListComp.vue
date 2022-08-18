@@ -1,49 +1,47 @@
 <template>
-  <ul class="list">
-    <li class="list__item">
-      <span class="list__item_checkbox"></span>
-      <span class="list__item_title">Описание</span>
-      <span class="list__item_status">Статус</span>
-      <span class="list__item_date">Дата</span>
-    </li>
-    <ListItemComp
-      class="list__item"
-      v-for="item in itemsArr || getTasks"
-      :key="item?.id"
-      :item="item"
-    />
-  </ul>
+  <div class="container">
+    <ul class="list">
+      <li class="list__item">
+        <span class="list__item_checkbox-block"></span>
+        <span class="list__item_title title-divider">Описание</span>
+        <span class="list__item_status title-divider">Статус</span>
+        <span class="list__item_date title-divider">Дата</span>
+      </li>
+      <ListItemComp
+        class="list__item"
+        v-for="item in itemsArr"
+        :key="item?.id"
+        :item="item"
+        @checkboxToggle="handle"
+      />
+    </ul>
+  </div>
 </template>
-
 <!--
 @TODO:
-Вынести листайтем в отдельный компонент
-добавить стили
+разделители у тайтлов
 -->
-
 <script>
 import ListItemComp from "./ListItemComp.vue";
-import { mapGetters } from "vuex";
 
 export default {
   name: "ListComp",
-  data() {
-    return {};
-  },
+  emits: ["childEmit"],
   props: {
     itemsArr: Array,
   },
-
   components: {
     ListItemComp,
   },
-  computed: {
-    ...mapGetters(["getTasks"]),
+  methods: {
+    handle(i) {
+      this.$emit("childEmit", i);
+    },
   },
 };
 </script>
 
-<style scoped>
+<style>
 .list {
   display: flex;
   flex-direction: column;
@@ -54,5 +52,37 @@ export default {
   align-items: center;
   min-height: 58px;
   border-bottom: 1px solid #eeebe9;
+  padding: 0px 30px 0px 40px;
+}
+.list__item:hover {
+  background-color: #f6f9ff;
+}
+.list__item_checkbox {
+  display: none;
+}
+.list__item_checkbox-block {
+  width: 100px;
+}
+.list__item_title {
+  min-width: 300px;
+  flex-grow: 1;
+}
+.list__item .title-divider {
+  position: relative;
+}
+.list__item .title-divider::before {
+  position: absolute;
+  content: "";
+  height: 32px;
+  width: 1px;
+  background-color: #c4c4c4;
+  left: -20px;
+  top: -8px;
+}
+.list__item_status {
+  width: 150px;
+}
+.list__item_date {
+  width: 100px;
 }
 </style>

@@ -1,23 +1,38 @@
 <template>
-  <div class="modal">
-    <label for="descr">{{ error || "Описание" }}</label>
-    <input
-      type="text"
-      name="descr"
-      id="descr"
-      placeholder="Введите описание"
-      v-model="title"
-      @keyup.enter="submit()"
-    />
-    <button class="button-close" @click="hide()">X</button>
-    <button class="button-submit" @click="submit()">Создать</button>
+  <div class="background" @keyup.esc="hide()">
+    <div class="modal">
+      <div class="modal__header">
+        <h1 class="modal__title">Создать новую задачу</h1>
+        <button class="button-close" @click="hide()">
+          <svg
+            width="8"
+            height="8"
+            viewBox="0 0 8 8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M1 1L4 4M7 7L4 4M4 4L7 1M4 4L1 7" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+      <label class="modal__label" for="descr">{{ error || "Описание" }}</label>
+      <input
+        class="modal__input"
+        ref="input"
+        type="text"
+        name="descr"
+        id="descr"
+        placeholder="Введите описание"
+        v-model="title"
+        @keyup.enter="submit()"
+      />
+      <button class="button-submit" @click="submit()">Создать</button>
+    </div>
   </div>
 </template>
 
 
 <!--
 @TODO:
-сделать подложку
 добавить стили
 -->
 
@@ -41,40 +56,120 @@ export default {
         id: Math.floor(Date.now() * Math.random()),
         isDone: false,
       };
-      this.title
-        ? this.addTask(task)
-        : (this.error = "У задачи должно быть описание!");
-      this.title = "";
+      if (!this.title) return (this.error = "У задачи должно быть описание!");
+
+      this.addTask(task);
+      this.hide();
     },
     hide() {
       this.error = "";
       this.title = "";
       this.updateIsModalShown();
+      document.body.style.height = "auto";
+      document.body.style.overflow = "auto";
     },
   },
   computed: {
     ...mapGetters(["getIsModalShown"]),
   },
+  mounted() {
+    this.$refs.input.focus();
+  },
 };
 </script>
 
 <style scoped>
-.modal {
+.background {
+  backdrop-filter: blur(4px);
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
   position: absolute;
-  top: 30vh;
-  left: 20vw;
-  background: #f8f8f8;
-  padding: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.expenceEdit {
+.modal {
   display: flex;
-  position: absolute;
+  flex-direction: column;
+  padding: 40px 40px 50px 40px;
+  min-width: 400px;
+  min-height: 280px;
+  background: #ffffff;
+  border: 1px solid #dde2e4;
+  box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
 }
-.button-close {
-  position: absolute;
-  top: 0;
-  right: 0;
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.modal__title {
+  font-family: montserrat;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 24px;
+}
+.modal__label {
+  font-family: agavantgarde;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 16px;
+  margin-bottom: 5px;
+}
+.modal__input {
+  padding: 11px 16px;
+  margin-bottom: 30px;
+  background: #ffffff;
+  border: 1px solid #dde2e4;
+  border-radius: 8px;
+}
+.modal__input::placeholder {
+  color: #00000080;
+}
+.button-submit,
+.button-submit:active {
+  width: 153px;
+  height: 48px;
+  background-color: #f0f5ff;
+  border-radius: 8px;
+  color: #314b99;
+  border: none;
+  align-self: center;
+  font-family: vela;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 24px;
+  transition: 0.5s;
+}
+.button-submit:hover {
+  color: #f0f5ff;
+  background-color: #314b99;
+  transition: 0.5s;
+}
+.button-close,
+.button-close:active {
+  background-color: #314b99;
+  stroke: #fff;
+  border-radius: 5px;
+  border: none;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+}
+.button-close:hover {
+  background-color: #fff;
+  stroke: #314b99;
+  border: 1px solid #314b99;
+  transition: 0.5s;
 }
 </style>

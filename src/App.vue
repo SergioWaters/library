@@ -1,5 +1,7 @@
 <template>
-  <LayoutView />
+  <div class="container">
+    <LayoutView />
+  </div>
 </template>
 
 <script>
@@ -15,21 +17,31 @@ export default {
       isModalShown: false,
     };
   },
-  methods: {},
-  computed: {},
-  created() {
-    // this.fetchData();
-  },
 };
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: vela;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: #16191d;
+  outline: none;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: vela, montserrat, agavantgarde, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: 100px 0;
+  background-color: #fff;
+}
+.container {
+  margin: 0 auto;
+  max-width: 1300px;
 }
 </style>
