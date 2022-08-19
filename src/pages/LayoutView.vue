@@ -1,15 +1,13 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <h1 class="title">{{ title }}</h1>
-      <Button @click="showModal" />
-    </div>
-    <Filter class="filter" @filter="filter" :keys="keys" />
-    <List class="list" :itemsArr="itemsArr" @childEmit="emitHandler" />
-    <transition name="fade">
-      <Modal :title="title" v-if="getIsModalShown" />
-    </transition>
+  <div class="header">
+    <h1 class="title">{{ title }}</h1>
+    <Button @click="showModal" />
   </div>
+  <Filter class="filter" @filter="filter" :keys="keys" />
+  <List class="list" :itemsArr="itemsArr" @childEmit="emitHandler" />
+  <transition name="fade">
+    <Modal :title="title" v-if="getIsModalShown" />
+  </transition>
 </template>
 
 <script>
@@ -18,7 +16,7 @@ import Filter from "@/components/FilterComp.vue";
 import Modal from "@/components/ModalComp.vue";
 import Button from "@/components/ButtonComp.vue";
 
-import { mapMutations, mapGetters, mapActions } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "LayoutView",
@@ -30,7 +28,7 @@ export default {
   },
   data() {
     return {
-      itemsArr: Array,
+      itemsArr: [],
       title: "To Do List",
       keys: {
         date: "Дата",
@@ -59,7 +57,6 @@ export default {
         return (this.itemsArr = this.getTasksFilteredBy);
       if (obj.action === "sort") return (this.itemsArr = this.getTasksSortedBy);
     },
-    ...mapActions(["fetchData"]),
     ...mapMutations(["updateIsModalShown", "setFilter", "changeTask"]),
   },
   computed: {
@@ -69,6 +66,10 @@ export default {
       "getTasksFilteredBy",
       "getTasks",
     ]),
+  },
+  created() {
+    if (!this.getTasks) this.fetchData();
+    this.itemsArr = this.getTasks;
   },
 };
 </script>

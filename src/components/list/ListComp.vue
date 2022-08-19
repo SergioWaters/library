@@ -1,26 +1,20 @@
 <template>
-  <div class="container">
-    <ul class="list">
-      <li class="list__item">
-        <span class="list__item_checkbox-block"></span>
-        <span class="list__item_title title-divider">Описание</span>
-        <span class="list__item_status title-divider">Статус</span>
-        <span class="list__item_date title-divider">Дата</span>
-      </li>
-      <ListItemComp
-        class="list__item"
-        v-for="item in itemsArr"
-        :key="item?.id"
-        :item="item"
-        @checkboxToggle="handle"
-      />
-    </ul>
-  </div>
+  <ul class="list">
+    <li class="list__item">
+      <span class="list__item_checkbox-block"></span>
+      <span class="list__item_title title-divider">Описание</span>
+      <span class="list__item_status title-divider">Статус</span>
+      <span class="list__item_date title-divider">Дата</span>
+    </li>
+    <ListItemComp
+      class="list__item"
+      v-for="item in itemsArr"
+      :key="item?.id"
+      :item="item"
+      @checkboxToggle="handle"
+    />
+  </ul>
 </template>
-<!--
-@TODO:
-разделители у тайтлов
--->
 <script>
 import ListItemComp from "./ListItemComp.vue";
 
@@ -40,7 +34,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .list {
   display: flex;

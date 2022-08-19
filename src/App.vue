@@ -6,7 +6,6 @@
 
 <script>
 import LayoutView from "./pages/LayoutView.vue";
-import { mapGetters } from "vuex";
 
 export default {
   name: "App",
@@ -17,18 +16,6 @@ export default {
     return {
       isModalShown: false,
     };
-  },
-  computed: {
-    ...mapGetters([
-      "getIsModalShown",
-      "getTasksSortedBy",
-      "getTasksFilteredBy",
-      "getTasks",
-    ]),
-  },
-  created() {
-    if (!this.getTasks.length) this.fetchData();
-    this.itemsArr = this.getTasks;
   },
 };
 </script>
