@@ -18,8 +18,7 @@ import Filter from "@/components/FilterComp.vue";
 import Modal from "@/components/ModalComp.vue";
 import Button from "@/components/ButtonComp.vue";
 
-import { mapMutations, mapGetters } from "vuex";
-import { mapActions } from "vuex";
+import { mapMutations, mapGetters, mapActions } from "vuex";
 
 export default {
   name: "LayoutView",
@@ -70,10 +69,6 @@ export default {
       "getTasksFilteredBy",
       "getTasks",
     ]),
-  },
-  created() {
-    if (!this.getTasks) this.fetchData();
-    this.itemsArr = this.getTasks;
   },
 };
 </script>
