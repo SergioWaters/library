@@ -3,8 +3,8 @@ import { vuexLocal } from './persist'
 
 export const tasksState = {
   state: {
-    tasksArr: Array,
-    searchString: String,
+    tasksArr: [],
+    searchString: '',
   },
   getters: {
     getTasks(state) {
