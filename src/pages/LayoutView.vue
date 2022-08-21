@@ -3,8 +3,20 @@
     <h1 class="title">{{ title }}</h1>
     <Button @click="showModal" />
   </div>
-  <Filter class="filter" @filter="filter" :keys="keys" />
-  <List class="list" :itemsArr="itemsArr" @childEmit="emitHandler" />
+  <Filter
+    class="filter"
+    @filter="filter"
+    @sort="sortTasksBy"
+    :keys="keys"
+    placeHolder="Поиск ID, Имени, статуса или даты"
+    :defaultKey="keys.date"
+  />
+  <List
+    class="list"
+    :itemsArr="getArr"
+    @checkboxToggle="changeTask"
+    @deleteItem="deleteTask"
+  />
   <transition name="fade">
     <Modal :title="title" v-if="getIsModalShown" />
   </transition>
@@ -12,11 +24,11 @@
 
 <script>
 import List from "@/components/list/ListComp.vue";
-import Filter from "@/components/FilterComp.vue";
 import Modal from "@/components/ModalComp.vue";
+import Filter from "@/components/FilterComp.vue";
 import Button from "@/components/ButtonComp.vue";
 
-import { mapMutations, mapGetters } from "vuex";
+import { mapMutations, mapGetters, mapActions } from "vuex";
 
 export default {
   name: "LayoutView",
@@ -28,8 +40,8 @@ export default {
   },
   data() {
     return {
-      itemsArr: [],
       title: "To Do List",
+      filterString: "",
       keys: {
         date: "Дата",
         isDone: "Выполнено",
@@ -39,11 +51,9 @@ export default {
     };
   },
   methods: {
-    emitHandler(id) {
-      const find = this.getTasks.findIndex((i) => +i.id === +id);
-      find >= 0
-        ? this.changeTask(find)
-        : { ...new Error(), message: "there is NO task with id" + id };
+    filter(str) {
+      this.setFilterString(str);
+      this.filterTasksBy(str);
     },
     showModal() {
       this.updateIsModalShown();
@@ -51,25 +61,29 @@ export default {
       document.body.style.overflow = "hidden";
       document.body.style.marginRight = "20px";
     },
-    filter(obj) {
-      this.setFilter(obj.string);
-      if (obj.action === "filter")
-        return (this.itemsArr = this.getTasksFilteredBy);
-      if (obj.action === "sort") return (this.itemsArr = this.getTasksSortedBy);
-    },
-    ...mapMutations(["updateIsModalShown", "setFilter", "changeTask"]),
+    ...mapMutations([
+      "updateIsModalShown",
+      "filterTasksBy",
+      "sortTasksBy",
+      "changeTask",
+      "deleteTask",
+      "setFilterString",
+    ]),
+    ...mapActions(["fetchData"]),
   },
   computed: {
     ...mapGetters([
       "getIsModalShown",
-      "getTasksSortedBy",
-      "getTasksFilteredBy",
+      "getFilteredTasks",
       "getTasks",
+      "getFilterString",
     ]),
+    getArr() {
+      return this.getFilterString ? this.getFilteredTasks : this.getTasks;
+    },
   },
   created() {
-    if (!this.getTasks) this.fetchData();
-    this.itemsArr = this.getTasks;
+    this.sortTasksBy("date");
   },
 };
 </script>

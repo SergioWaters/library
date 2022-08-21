@@ -1,9 +1,9 @@
 <template>
-  <div class="background" @keyup.esc="hide()">
+  <div class="background" @keyup.esc="hide">
     <div class="modal">
       <div class="modal__header">
         <h1 class="modal__title">Создать новую задачу</h1>
-        <button class="button-close" @click="hide()">
+        <button class="button-close" @click="hide">
           <svg
             width="8"
             height="8"
@@ -14,7 +14,14 @@
           </svg>
         </button>
       </div>
-      <label class="modal__label" for="descr">{{ error || "Описание" }}</label>
+      <label class="modal__label" for="descr">
+        <ul class="modal__label_secret" v-if="title">
+          <li>*Напечатайте 'demo'</li>
+          <li>*Нажмите Enter для добавления задачи</li>
+          <li>*Нажмите ESC, чтобы закрыть окно</li>
+        </ul>
+        {{ error || "Описание" }}</label
+      >
       <input
         class="modal__input"
         ref="input"
@@ -23,21 +30,22 @@
         id="descr"
         placeholder="Введите описание"
         v-model="title"
-        @keyup.enter="submit()"
+        @keyup.enter="submit"
       />
-      <button class="button-submit" @click="submit()">Создать</button>
+      <button class="button-submit" @click="submit">Создать</button>
+      <button
+        class="button-submit demo"
+        @click="submitDemo"
+        v-if="title === 'demo'"
+      >
+        DEMO
+      </button>
     </div>
   </div>
 </template>
 
-
-<!--
-@TODO:
-добавить стили
--->
-
 <script>
-import { mapMutations, mapGetters } from "vuex";
+import { mapMutations, mapGetters, mapActions } from "vuex";
 export default {
   name: "ModalWindow",
   data() {
@@ -48,25 +56,29 @@ export default {
   },
   methods: {
     ...mapMutations(["addTask", "updateIsModalShown"]),
+    ...mapActions(["fetchData"]),
     submit() {
       this.error = "";
+      if (!this.title) return (this.error = "У задачи должно быть описание!");
+      if (this.title === "DEMO") return this.submitDemo();
       const task = {
         title: this.title,
         date: Date.now(),
         id: Math.floor(Date.now() * Math.random()),
         isDone: false,
       };
-      if (!this.title) return (this.error = "У задачи должно быть описание!");
-
       this.addTask(task);
       this.hide();
     },
     hide() {
-      this.error = "";
-      this.title = "";
+      this.error = this.title = "";
       this.updateIsModalShown();
       document.body.style.height = "auto";
       document.body.style.overflow = "auto";
+    },
+    submitDemo() {
+      this.fetchData();
+      this.hide();
     },
   },
   computed: {
@@ -121,6 +133,11 @@ export default {
   font-size: 14px;
   line-height: 16px;
   margin-bottom: 5px;
+  max-width: 300px;
+}
+.modal__label_secret {
+  list-style: none;
+  margin: 0 0 20px 10px;
 }
 .modal__input {
   padding: 11px 16px;
@@ -152,6 +169,9 @@ export default {
   color: #f0f5ff;
   background-color: #314b99;
   transition: 0.5s;
+}
+.demo {
+  margin-top: 20px;
 }
 .button-close,
 .button-close:active {

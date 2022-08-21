@@ -10,6 +10,10 @@ export default {
 </script>
 
 <style scoped>
+.button:hover {
+  background-color: #314b99;
+  transition: 0.5s;
+}
 .button,
 .button:active {
   background-color: #d6dbeb;
@@ -20,8 +24,9 @@ export default {
   border: none;
   transition: 0.5s;
 }
-.button:hover {
-  background-color: #314b99;
+.button:hover::before,
+.button:hover::after {
+  background-color: #d6dbeb;
   transition: 0.5s;
 }
 .button::before,
@@ -39,10 +44,5 @@ export default {
 }
 .button::after {
   transform: rotate(90deg);
-}
-.button:hover::before,
-.button:hover::after {
-  background-color: #d6dbeb;
-  transition: 0.5s;
 }
 </style>

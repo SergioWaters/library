@@ -11,7 +11,8 @@
       v-for="item in itemsArr"
       :key="item?.id"
       :item="item"
-      @checkboxToggle="handle"
+      @checkboxToggle="checkboxToggle"
+      @deleteItem="deleteItem"
     />
   </ul>
 </template>
@@ -20,7 +21,7 @@ import ListItemComp from "./ListItemComp.vue";
 
 export default {
   name: "ListComp",
-  emits: ["childEmit"],
+  emits: ["checkboxToggle", "deleteItem"],
   props: {
     itemsArr: Array,
   },
@@ -28,8 +29,13 @@ export default {
     ListItemComp,
   },
   methods: {
-    handle(i) {
-      this.$emit("childEmit", i);
+    checkboxToggle(i) {
+      console.log(i);
+      this.$emit("checkboxToggle", i);
+    },
+    deleteItem(i) {
+      console.log(i);
+      this.$emit("deleteItem", i);
     },
   },
 };
@@ -54,7 +60,7 @@ export default {
   display: none;
 }
 .list__item_checkbox-block {
-  width: 100px;
+  width: 80px;
 }
 .list__item_title {
   min-width: 300px;

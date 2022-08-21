@@ -18,9 +18,9 @@
         type="text"
         name="filter"
         id="filter"
-        placeholder="Поиск ID, Имени, статуса или даты"
+        :placeholder="placeHolder"
         v-model="searchString"
-        @input="filter('filter')"
+        @input="filter"
       />
     </label>
 
@@ -30,9 +30,10 @@
         class="select"
         name="select"
         id="select"
-        @change="filter('sort')"
+        @change="sort"
         v-model="sortString"
       >
+        <option disabled hidden selected value="">{{ defaultKey }}</option>
         <option :value="key" v-for="(value, key) of keys" :key="key">
           {{ value }}
         </option>
@@ -46,9 +47,11 @@
 
 export default {
   name: "SortFilter",
-  emits: ["filter"],
+  emits: ["filter", "sort"],
   props: {
     keys: Object,
+    defaultKey: String,
+    placeHolder: String,
   },
   data() {
     return {
@@ -57,12 +60,11 @@ export default {
     };
   },
   methods: {
-    filter(action) {
-      const obj = {
-        string: this.searchString || this.sortString,
-        action,
-      };
-      this.$emit("filter", obj);
+    filter() {
+      this.$emit("filter", this.searchString);
+    },
+    sort() {
+      this.$emit("sort", this.sortString);
     },
   },
 };
@@ -78,16 +80,20 @@ export default {
 select {
   border: none;
   margin-left: 15px;
+  background-color: transparent;
 }
 input {
   border: none;
+  border-bottom: 1px solid transparent;
   margin-left: 15px;
   min-width: 230px;
+  background-color: transparent;
+}
+input:hover {
+  border-bottom: 1px solid #c4c4c4;
 }
 .search_input::placeholder {
   color: #c4c4c4;
   line-height: 18px;
-}
-.search_input-label {
 }
 </style>

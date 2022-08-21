@@ -4,26 +4,31 @@ import { vuexLocal } from './persist'
 export const tasksState = {
   state: {
     tasksArr: [],
-    searchString: '',
+    filteredArr: [],
+    filterString: '',
   },
   getters: {
+    getFilterString(state) {
+      return state.filterString
+    },
     getTasks(state) {
       return state.tasksArr
     },
-    getTasksSortedBy(state) {
-      const sortedArr = state.tasksArr;
-      const key = state.searchString
-      return sortedArr.sort(
-        (a, b) => (a[key] < b[key]) ? 1 : -1);
-    },
-    getTasksFilteredBy(state) {
-      const regExp = new RegExp(`${state.searchString}`, 'gi');
-      return state.tasksArr.filter(i => Object.values(i).some(el => regExp.test(el)))
+    getFilteredTasks(state) {
+      return state.filteredArr
     }
   },
   mutations: {
-    setFilter(state, str) {
-      state.searchString = str;
+    setFilterString(state, str) {
+      state.filterString = str
+    },
+    sortTasksBy(state, key) {
+      state.tasksArr = [...state.tasksArr.sort(
+        (a, b) => (a[key] < b[key]) ? 1 : -1)]
+    },
+    filterTasksBy(state, searchString) {
+      const regExp = new RegExp(`${searchString}`, 'gi');
+      state.filteredArr = state.tasksArr.filter(i => Object.values(i).some(el => regExp.test(el)));
     },
     updateTasks(state, arr) {
       state.tasksArr = arr;
@@ -31,9 +36,21 @@ export const tasksState = {
     addTask(state, obj) {
       state.tasksArr.unshift(obj);
     },
-    changeTask(state, indx) {
-      state.tasksArr[indx].isDone = !state.tasksArr[indx].isDone
+    changeTask(state, id) {
+      let find = null;
+      if (state.filterString) {
+        find = state.filteredArr.findIndex((i) => i.id === id);
+        state.filteredArr[find].isDone = !state.filteredArr[find].isDone;
+      } else {
+        find = state.tasksArr.findIndex((i) => i.id === id);
+        state.tasksArr[find].isDone = !state.tasksArr[find].isDone;
+      }
     },
+    deleteTask(state, id) {
+      state.filterString ?
+        state.filteredArr = state.filteredArr.filter((i) => i.id != id) :
+        state.tasksArr = state.tasksArr.filter((i) => i.id !== id);
+    }
   },
   actions: {
     fetchData(ctx) {

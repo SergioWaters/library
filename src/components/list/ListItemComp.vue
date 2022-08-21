@@ -22,13 +22,25 @@
           /></svg
       ></label>
       <input
-        @change="toggleChecked(item.id)"
+        @change="checkboxToggle(item.id)"
         class="list__item_checkbox"
         type="checkbox"
         name="checkbox"
         :id="item.id"
         :checked="item.isDone"
       />
+      <button class="list__item_btn" @click="deleteItem(item.id)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+        >
+          <path
+            d="M 10 2 L 9 3 L 5 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 21.093063 5.9069372 22 7 22 L 17 22 C 18.093063 22 19 21.093063 19 20 L 19 5 L 20 5 L 20 3 L 19 3 L 18 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z"
+          />
+        </svg>
+      </button>
     </div>
 
     <span class="list__item_title">{{ item?.title }}</span>
@@ -44,13 +56,16 @@
 export default {
   name: "ListItem",
   props: { item: Object },
-  emits: ["checkboxToggle"],
+  emits: ["checkboxToggle", "deleteItem"],
   methods: {
     getDate(d) {
       return new Intl.DateTimeFormat("ru-RU").format(new Date(d));
     },
-    toggleChecked(id) {
+    checkboxToggle(id) {
       this.$emit("checkboxToggle", id);
+    },
+    deleteItem(id) {
+      this.$emit("deleteItem", id);
     },
   },
 };
@@ -69,6 +84,25 @@ export default {
   box-shadow: 0 4px 4px 0 rgba(19, 78, 193, 0.15);
   stroke: #134ec1;
   fill: #134ec1;
+}
+.list__item_checkbox-block {
+  max-width: 80px;
+  position: relative;
+}
+.list__item_btn {
+  display: none;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  fill: #134ec1;
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  right: 25px;
+  top: 0;
+}
+.list__item_checkbox-block:hover .list__item_btn {
+  display: block;
 }
 .not-done {
   color: #f89b11;
