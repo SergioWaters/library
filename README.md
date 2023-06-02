@@ -1,3 +1,5 @@
+# ToDo List. stack: Vue.js 3.3, Vuex, Vue-router.
+
 # library
 
 ## Project setup
