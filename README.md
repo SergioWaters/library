@@ -1,4 +1,5 @@
-# ToDo List. stack: Vue.js 3.3, Vuex, Vue-router.
+# ToDo List. 
+# stack: Vue.js 3.3, Vuex 4, Vuex-persist 3.
 
 # library
 
